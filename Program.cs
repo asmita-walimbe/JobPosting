@@ -1,11 +1,28 @@
+using JobPosting.Interface;
+using JobPosting.Middleware;
+using JobPosting.Repository;
+using JobPosting.Service;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
+using JobPosting.Validators;
+using JobPosting.Constraints;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<JobPostingDtoValidator>());
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IJobPostingService, JobPostingService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddServiceCollection();
+builder.Services.Configure<RouteOptions>(options =>
+options.ConstraintMap.Add("customConstraint", typeof(CustomRoutesConstraint)));
 
 var app = builder.Build();
 
@@ -21,5 +38,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.Run();
