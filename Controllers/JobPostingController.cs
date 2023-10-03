@@ -57,7 +57,6 @@ namespace JobPosting.Controllers
         /// </summary>
         /// <param name="jobPostingDto"></param>
         /// <returns>Retursns Created StatusCode</returns>
-       // [Route("insert")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JobPostingDto jobPostingDto)
         {
@@ -75,7 +74,6 @@ namespace JobPosting.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
-        //[Route("update/{id}")]
         [HttpPut()]
         public async Task<IActionResult> Put(Guid id, [FromBody] JobPostingDto jobPostingDto)
         {
@@ -96,7 +94,6 @@ namespace JobPosting.Controllers
         /// Delete JobPost by Id
         /// </summary>
         /// <param name="id"></param>
-       // [Route("delete/{id}")]
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
