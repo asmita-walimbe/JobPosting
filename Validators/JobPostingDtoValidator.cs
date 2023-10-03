@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using JobPosting.Dto;
+using JobPosting.Constants;
 
 namespace JobPosting.Validators
 {
@@ -9,11 +10,11 @@ namespace JobPosting.Validators
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
-                .WithMessage("Title is required");
+                .WithMessage(Constant.TitleError);
 
             RuleFor(x => x.Description)
                 .NotEmpty()
-                .WithMessage("Description is required");
+                .WithMessage(Constant.DescriptionError);
         }
     }
 }

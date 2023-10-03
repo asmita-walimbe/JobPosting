@@ -1,6 +1,6 @@
 ﻿namespace JobPosting.Dto
 {
-    public class JobPostingDto
+    public record JobPostingDto
     {
         public Guid? Id { get; set; }
         public string Title { get; set; }

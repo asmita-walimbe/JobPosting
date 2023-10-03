@@ -15,28 +15,31 @@ namespace JobPosting.Service
             _mapper = mapper;
             _jobPostingRepository = jobPostingRepository;
         }
-        public async Task<List<JobPostingDto>> GetAllJobPostingAsync()
+        public async Task<List<JobPostingDto>> GetAllAsync()
         {
             var jobPostings = await _jobPostingRepository.GetAllAsync();
             return _mapper.Map<List<JobPostingDto>>(jobPostings);
         }
 
-        public async Task<JobPostingDto> GetJobPostingAsync(Guid id)
+        public async Task<JobPostingDto> GetAsync(Guid id)
         {
             var jobPosting = await _jobPostingRepository.GetByIdAsync(id);
             return _mapper.Map<JobPostingDto>(jobPosting);
         }
-        public async Task CreateJobPostingAsync(JobPostingDto jobPostingDto)
+        public async Task<JobPostingDto> CreateAsync(JobPostingDto jobPostingDto)
         {
             var jobPositing = _mapper.Map<JobPostingModel>(jobPostingDto);
-            await _jobPostingRepository.CreateAsync(jobPositing);
+            var response = await _jobPostingRepository.CreateAsync(jobPositing);
+            var responseModel = _mapper.Map<JobPostingDto>(response);
+
+            return responseModel;
         }
-        public async Task UpdateJobPostingAsync(Guid id, JobPostingDto jobPostingDto)
+        public async Task UpdateAsync(Guid id, JobPostingDto jobPostingDto)
         {
             var jobPositing = _mapper.Map<JobPostingModel>(jobPostingDto);
             await _jobPostingRepository.UpdateAsync(id, jobPositing);
         }
-        public async Task DeleteJobPostingAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await _jobPostingRepository.DeleteAsync(id);
         }

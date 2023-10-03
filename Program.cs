@@ -5,6 +5,7 @@ using JobPosting.Service;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using JobPosting.Validators;
+using JobPosting.Constraints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IJobPostingService, JobPostingService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddServiceCollection();
+builder.Services.Configure<RouteOptions>(options =>
+options.ConstraintMap.Add("customConstraint", typeof(CustomRoutesConstraint)));
 
 var app = builder.Build();
 

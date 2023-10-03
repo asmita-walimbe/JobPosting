@@ -4,10 +4,10 @@ namespace JobPosting.Interface
 {
     public interface IJobPostingService
     {
-        Task<JobPostingDto> GetJobPostingAsync(Guid id);
-        Task<List<JobPostingDto>> GetAllJobPostingAsync();
-        Task CreateJobPostingAsync(JobPostingDto jobPostingDto);
-        Task UpdateJobPostingAsync(Guid id, JobPostingDto jobPostingDto);
-        Task DeleteJobPostingAsync(Guid id);
+        Task<JobPostingDto> GetAsync(Guid id);
+        Task<List<JobPostingDto>> GetAllAsync();
+        Task<JobPostingDto> CreateAsync(JobPostingDto jobPostingDto);
+        Task UpdateAsync(Guid id, JobPostingDto jobPostingDto);
+        Task DeleteAsync(Guid id);
     }
 }

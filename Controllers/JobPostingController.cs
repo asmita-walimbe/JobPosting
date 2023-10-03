@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using JobPosting.Dto;
 using JobPosting.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace JobPosting.Controllers
 {
@@ -23,14 +24,9 @@ namespace JobPosting.Controllers
         /// </summary>
         /// <returns>Returns all job postings</returns>
         [HttpGet]
-        [Route("get")]
         public async Task<IActionResult> Get()
         {
-            var response = _jobPostingService.GetAllJobPostingAsync();
-            if (response == null)
-            {
-                return NotFound();
-            }
+            var response = _jobPostingService.GetAllAsync();
             return Ok(response);
         }
 
@@ -42,16 +38,16 @@ namespace JobPosting.Controllers
         /// 
         [Route("getById/{id}")]
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById([Required]Guid id)
         {
-            if (id == null)
+            if (id == null || id == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            var response = _jobPostingService.GetJobPostingAsync(id);
+            var response = _jobPostingService.GetAsync(id);
             if (response == null)
             {
-                return NotFound();
+                return NoContent();
             }
             return Ok(response);
         }
@@ -61,17 +57,16 @@ namespace JobPosting.Controllers
         /// </summary>
         /// <param name="jobPostingDto"></param>
         /// <returns>Retursns Created StatusCode</returns>
-        [Route("insert")]
+       // [Route("insert")]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JobPostingDto jobPostingDto)
         {
             var validationResult = _validator.Validate(jobPostingDto);
             if (validationResult.IsValid)
             {
-                await _jobPostingService.CreateJobPostingAsync(jobPostingDto);
-                return NoContent();
+                var response = await _jobPostingService.CreateAsync(jobPostingDto);
+                return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
             }
-
             return BadRequest(validationResult);
         }
 
@@ -80,7 +75,7 @@ namespace JobPosting.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
-        [Route("update/{id}")]
+        //[Route("update/{id}")]
         [HttpPut()]
         public async Task<IActionResult> Put(Guid id, [FromBody] JobPostingDto jobPostingDto)
         {
@@ -91,8 +86,8 @@ namespace JobPosting.Controllers
             var validationResult = _validator.Validate(jobPostingDto);
             if (validationResult.IsValid)
             {
-                await _jobPostingService.UpdateJobPostingAsync(id, jobPostingDto);
-                return NoContent();
+                await _jobPostingService.UpdateAsync(id, jobPostingDto);
+                return Ok();
             }
             return BadRequest(validationResult);
         }
@@ -101,7 +96,7 @@ namespace JobPosting.Controllers
         /// Delete JobPost by Id
         /// </summary>
         /// <param name="id"></param>
-        [Route("delete/{id}")]
+       // [Route("delete/{id}")]
         [HttpDelete]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -109,8 +104,8 @@ namespace JobPosting.Controllers
             {
                 throw new ArgumentNullException(nameof(id));
             }
-            await _jobPostingService.DeleteJobPostingAsync(id);
-            return NoContent();
+            await _jobPostingService.DeleteAsync(id);
+            return Ok();
         }
     }
 }
