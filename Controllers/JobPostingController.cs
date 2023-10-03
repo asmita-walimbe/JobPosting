@@ -87,7 +87,7 @@ namespace JobPosting.Controllers
             if (validationResult.IsValid)
             {
                 await _jobPostingService.UpdateAsync(id, jobPostingDto);
-                return Ok();
+                return NoContent();
             }
             return BadRequest(validationResult);
         }
@@ -105,7 +105,7 @@ namespace JobPosting.Controllers
                 throw new ArgumentNullException(nameof(id));
             }
             await _jobPostingService.DeleteAsync(id);
-            return Ok();
+            return NoContent();
         }
     }
 }
