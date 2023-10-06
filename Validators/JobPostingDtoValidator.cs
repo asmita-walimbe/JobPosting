@@ -10,10 +10,12 @@ namespace JobPosting.Validators
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
+                .NotNull()
                 .WithMessage(Constant.TitleError);
 
             RuleFor(x => x.Description)
                 .NotEmpty()
+                 .NotNull()
                 .WithMessage(Constant.DescriptionError);
         }
     }
